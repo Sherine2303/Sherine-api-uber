@@ -40,7 +40,18 @@
         $stmt->execute();
         $voitures = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $voitures;
-    }
+        }
+        public function createDBChauffeur($data){
+            $req = "INSERT INTO chauffeur (chauffeur_id,chauffeur_nom,chauffeur_telephone)
+                VALUES (:chauffeur_id, :chauffeur_nom, :chauffeur_telephone)";
+            $stmt =$this->pdo->prepare($req);
+            $stmt->bindParam(":chauffeur_id",$data['chauffeur_id'], PDO::PARAM_INT);
+            $stmt->bindParam(":chauffeur_nom",$data['chauffeur_nom'], PDO::PARAM_STR);
+            $stmt->bindParam(":chauffeur_telephone",$data['chauffeur_telephone'], PDO::PARAM_INT);
+            $stmt->execute();
+            $chauffeur = $this-> getDBChauffeursByID($data['chauffeur_id']);
+            return $chauffeur;
+        }
     }
     //$chauffeursModel = new ChauffeursModel(); 
     //print_r($chauffeursModel->getDBAllChauffeurs());

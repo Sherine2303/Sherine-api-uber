@@ -19,6 +19,7 @@ if (empty($_GET["page"])) {
     // On découpe cette chaîne en segments, en séparant sur le caractère "/"
     // Cela donne un tableau, ex : ["chauffeurs", "3"]
     $url = explode("/", $_GET['page']); //exploser l'url et mettre dans la 
+    $method = $_SERVER["REQUEST_METHOD"];
     
     // Affiche le contenu du tableau pour vérifier comment l’URL est interprétée
     //print_r($url);
@@ -26,49 +27,56 @@ if (empty($_GET["page"])) {
     // On teste le premier segment pour déterminer la ressource demandée
     switch($url[0]) {
         case "chauffeurs":
-        if (isset($url[1])) {
-            if (isset($url[2]) && $url[2] === "voitures") {
-                // /chauffeurs/3/voitures
-                $chauffeursController->getChauffeurByIdVoiture($url[1]);
-            } else {
-                // /chauffeurs/3
-                $chauffeursController->getDBChauffeursById($url[1]);
+            switch($method) {
+                case "GET":
+                    if (isset($url[1])) {
+                        if (isset($url[2]) && $url[2] === "voitures") {
+                            // /chauffeurs/3/voitures
+                            $chauffeursController->getChauffeurByIdVoiture($url[1]);
+                    } else {
+                        // /chauffeurs/3
+                        $chauffeursController->getDBChauffeursById($url[1]);
+                    }
+                    } else {
+                        // /chauffeurs
+                        echo $chauffeursController->getAllChauffeurs();
+                    }
+                    break;
+                case "POST":
+                        $data = json_decode(file_get_contents("php://input"),true);
+                        $chauffeursController->createChauffeur($data);
+                    break;
             }
-        } else {
-            // /chauffeurs
-            echo $chauffeursController->getAllChauffeurs();
-        }
         break;
-
-    case "clients":
-        if (isset($url[1])) {
-            $clientsController->getDBClientsById($url[1]);
-        } else {
-            echo $clientsController->getAllClients();
-        }
-        break;
-
-    case "voitures":
-        echo $voituresController->getAllVoitures();
-        break;
-
-    case "trajets":
-        if (isset($url[1])) {
-            if (isset($url[2]) && $url[2] === "detail") {
-                // /trajets/3/detail
-                $trajetsController->getTrajetByIdDetail($url[1]);
+        case "clients":
+            if (isset($url[1])) {
+                $clientsController->getDBClientsById($url[1]);
             } else {
-                // /trajets/3
-                $trajetsController->getDBTrajetsById($url[1]);
+                echo $clientsController->getAllClients();
             }
-        } else {
-            // /trajets
-            echo $trajetsController->getAllTrajets();
-        }
-        break;
+            break;
 
-    default:
-        echo "La page n'existe pas";
+        case "voitures":
+            echo $voituresController->getAllVoitures();
+            break;
+
+        case "trajets":
+            if (isset($url[1])) {
+                if (isset($url[2]) && $url[2] === "detail") {
+                    // /trajets/3/detail
+                    $trajetsController->getTrajetByIdDetail($url[1]);
+                } else {
+                    // /trajets/3
+                    $trajetsController->getDBTrajetsById($url[1]);
+                }
+            } else {
+                // /trajets
+                echo $trajetsController->getAllTrajets();
+            }
+            break;
+
+        default:
+            echo "La page n'existe pas";
+        }
     }
-}
 ?>
