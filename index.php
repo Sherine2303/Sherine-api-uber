@@ -91,6 +91,14 @@ if (empty($_GET["page"])) {
                     echo json_encode(["message" => "ID du client manquant dans l'URL"]);
                 }
                 break;
+                case "DELETE":
+                if (isset($url[1])) {
+                    $clientsController->deleteClient($url[1]);
+                } else {
+                    http_response_code(400);
+                    echo json_encode(["message" => "ID du client manquant dans l'URL"]);
+                }
+                break;
             }
             break;
         case "voitures":

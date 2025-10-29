@@ -66,6 +66,17 @@
             //verifie si une ligne a été modifiée 
             return $stmt->rowCount()>0;
         }
+        public function deleteDBClient ($id){
+            $req = "DELETE FROM client 
+                    WHERE client_id = :id";
+            $stmt = $this->pdo->prepare($req);
+
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            //verifie si une ligne a été modifiée 
+            return $stmt->rowCount()>0;
+        }
     }
     //$clientsModel = new ClientsModel(); 
     //print_r($clientsModel->getDBAllClients());

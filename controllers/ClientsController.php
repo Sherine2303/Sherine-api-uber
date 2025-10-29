@@ -39,6 +39,15 @@ class ClientsController
             echo json_encode(["message" => "Client non trouvé non modifiée"]);
         }
     }
+    public function deleteClient($id){
+        $success=$this->model->deleteDBClient($id);
+        if ($success){
+            http_response_code(204);
+        }else{
+            http_response_code(404);
+            echo json_encode(["message" => "Client introuvable"]);
+        }
+    }
 }
 //$clientsController = new ClientsController();
 //$clientsController->getAllClients();
