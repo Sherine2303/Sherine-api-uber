@@ -25,6 +25,11 @@ class ClientsController
         $lignesVoiture = $this->model->getDBChauffeurByIdVoiture($idChauffeurs);
         echo json_encode($lignesVoiture);
     }
+    public function createClient($data){
+        $ligneClient = $this ->model->createDBClient($data);
+        http_response_code(201);
+        echo json_encode($ligneClient);
+    }
 }
 //$clientsController = new ClientsController();
 //$clientsController->getAllClients();

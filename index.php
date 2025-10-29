@@ -49,13 +49,20 @@ if (empty($_GET["page"])) {
             }
         break;
         case "clients":
-            if (isset($url[1])) {
-                $clientsController->getDBClientsById($url[1]);
-            } else {
-                echo $clientsController->getAllClients();
+            switch($method){
+                case "GET":
+                    if (isset($url[1])) {
+                        $clientsController->getDBClientsById($url[1]);
+                    } else {
+                        echo $clientsController->getAllClients();
+                    }
+                    break;
+                case "POST":
+                    $data = json_decode(file_get_contents("php://input"),true);
+                    $clientsController->createClient($data);
+                    break;
             }
             break;
-
         case "voitures":
             echo $voituresController->getAllVoitures();
             break;
