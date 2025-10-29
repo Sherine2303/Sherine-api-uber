@@ -52,6 +52,21 @@
             $chauffeur = $this-> getDBChauffeursByID($data['chauffeur_id']);
             return $chauffeur;
         }
+        public function updateDBChauffeur ($id,$data){
+            $req = "UPDATE chauffeur
+                    SET chauffeur_id= :chauffeur_id, chauffeur_nom= :chauffeur_nom, Chauffeur_telephone= :chauffeur_telephone
+                    WHERE chauffeur_id= :id";
+            $stmt = $this->pdo->prepare($req);
+
+            $stmt->bindParam(":chauffeur_id",$data['chauffeur_id'], PDO::PARAM_INT);
+            $stmt->bindParam(":chauffeur_nom",$data['chauffeur_nom'], PDO::PARAM_STR);
+            $stmt->bindParam(":chauffeur_telephone",$data['chauffeur_telephone'], PDO::PARAM_INT);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            //verifie si une ligne a été modifiée 
+            return $stmt->rowCount()>0;
+        }
     }
     //$chauffeursModel = new ChauffeursModel(); 
     //print_r($chauffeursModel->getDBAllChauffeurs());
