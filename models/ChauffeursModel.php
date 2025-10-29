@@ -67,6 +67,17 @@
             //verifie si une ligne a été modifiée 
             return $stmt->rowCount()>0;
         }
+        public function deleteDBChauffeur ($id){
+            $req = "DELETE FROM chauffeur 
+                    WHERE chauffeur_id = :id";
+            $stmt = $this->pdo->prepare($req);
+
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            //verifie si une ligne a été modifiée 
+            return $stmt->rowCount()>0;
+        }
     }
     //$chauffeursModel = new ChauffeursModel(); 
     //print_r($chauffeursModel->getDBAllChauffeurs());
